@@ -1,0 +1,15 @@
+.centralizar {
+    justify-content: center;
+    align-items: center;
+
+}
+
+
+.centralizarLogo{
+margin-left: 40%;
+}
+
+.centralizarImg {
+    margin-left: 33%;
+    font-size: 130%;
+}

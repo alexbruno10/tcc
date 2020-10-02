@@ -1,11 +1,3 @@
 {
-  "users": [
-    {
-      "name": "alex",
-      "email": "alex_brunoneri@hotmail.com",
-      "telefone": "35998481412",
-      "cpf": "09670500656",
-      "id": 2
-    }
-  ]
+  "users": []
 }

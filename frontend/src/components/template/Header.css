@@ -1,11 +1,17 @@
 header.header {
-    background-color: #212529;
-    padding: 0px 15px;
+    background-color: #3c5ef5;
+    padding: 10px 5px;
     overflow: hidden;
     white-space: nowrap;
     box-shadow: var(--shadow);
 }
 
-header.header h1 {
-    font-size: 1.8em;
+
+.sair {
+    margin-left: 95%;
+    color: white;
+}
+
+.sair:hover {
+    color: #262626;
 }
