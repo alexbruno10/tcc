@@ -15,6 +15,12 @@ const all = async () => {
   return clients;
 };
 
+const get = async (id) => {
+
+  const client = await clientes.doc(id)
+  return client
+}
+
 const create = async (user) => {
   const cliente = await clientes.add(user);
   console.log(cliente);
@@ -24,4 +30,4 @@ const update = async (user) => {
   const cliente = await clientes.doc(user.id).set(user);
 };
 
-export default { create, all, update };
+export default { create, all, update, get };

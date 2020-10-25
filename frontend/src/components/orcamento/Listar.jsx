@@ -1,6 +1,7 @@
 import Main from "../template/Main";
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import orcamentoService from "../../services/orcamento";
 
 const headerProps = {
   icon: "orcamento",
@@ -24,6 +25,16 @@ const initialState = {
 
 export default class Listar extends Component {
   state = { ...initialState }; //chamando o estado inicial
+
+  async all() {
+    const orcamentos = await orcamentoService.all();
+    console.log(orcamentos);
+  }
+
+  componentDidMount() {
+    this.all();
+  }
+
   renderRows() {
     return this.state.list.map((orcamento) => {
       return (
