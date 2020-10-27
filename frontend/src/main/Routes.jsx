@@ -9,6 +9,7 @@ import Estoque from "../components/estoque/Estoque";
 import Pedidos from "../components/pedidos/Pedidos";
 import Manutencao from "../components/manutencao/Manutencao";
 import Listar from "../components/orcamento/Listar";
+import Login from "../components/login/Login";
 
 export default (props) => (
   <Switch>
@@ -16,6 +17,7 @@ export default (props) => (
     <Route path="/clientes" component={Clientes} />
     <Route path="/orcamento" exact component={Listar} />
     <Route path="/orcamento/novo" exact component={Orcamento} />
+    <Route path="/orcamento/:id" component={Orcamento} />
     <Route path="/notas" component={Notas} />
     <Route path="/estoque" component={Estoque} />
     <Route path="/pedidos" component={Pedidos} />

@@ -12,7 +12,7 @@ const headerProps = {
 
 const baseUrl = "http://localhost:3001/orcamento"; //definindo a comunicação com o db
 const initialState = {
-  orcamento: { cliente: "", itens: [] },
+  orcamento: { id: null, cliente: "", itens: [] },
   clientes: [],
   //definindo o estado inicial do formulario
   item: {
@@ -36,12 +36,23 @@ export default class Orcamento extends Component {
 
   componentWillMount() {
     this.allClientes();
+    const { id } = this.props.match.params;
+
+    if (id != undefined) {
+      this.editOrcamento(id);
+    }
+  }
+
+  async editOrcamento(id) {
+    const result = await orcamentoService.edit(id);
+    const orcamento = result.data();
+    orcamento.id = result.id;
+    this.setState({ orcamento: orcamento });
   }
 
   async allClientes() {
     const result = await clienteService.all();
     this.setState({ clientes: result });
-    console.log(this.state.clientes);
   }
 
   clear() {
@@ -67,7 +78,13 @@ export default class Orcamento extends Component {
 
   save() {
     const orcamento = this.state.orcamento;
-    orcamentoService.create(orcamento);
+    if (orcamento.id === null) {
+      orcamentoService.create(orcamento);
+    } else {
+      orcamentoService.update(orcamento);
+    }
+
+    this.props.history.push("/orcamento/");
   }
 
   getUpdatedList(item, add = true) {
@@ -92,7 +109,6 @@ export default class Orcamento extends Component {
     const item = { ...this.state.item };
     item[event.target.name] = event.target.value;
     this.setState({ item });
-    console.log(this.state.item);
   }
 
   changeCliente(event) {
@@ -112,6 +128,7 @@ export default class Orcamento extends Component {
                 value={this.state.orcamento.cliente}
                 class="form-control"
                 id="exampleFormControlSelect1"
+                disabled={this.state.orcamento.id != null}
                 onChange={this.changeCliente}
               >
                 <option>Selecione um Cliente</option>
@@ -235,15 +252,25 @@ export default class Orcamento extends Component {
           <td>{item.unid}</td>
           <td>{item.alt}</td>
           <td>{item.larg}</td>
-          <td>{item.valorUnit}</td>
-          <td>{item.alt * item.larg * item.valorUnit}</td>
           <td>
-            <button
+            {parseFloat(item.valorUnit).toLocaleString("pt-br", {
+              style: "currency",
+              currency: "BRL",
+            })}
+          </td>
+          <td>
+            {(item.alt * item.larg * item.valorUnit).toLocaleString("pt-br", {
+              style: "currency",
+              currency: "BRL",
+            })}
+          </td>
+          <td>
+            <buttLinkon
               className="btn btn-warning"
               onClick={() => this.load(item, index)}
             >
               <i className="fa fa-pencil"></i>
-            </button>
+            </buttLinkon>
             <button
               className="btn btn-danger ml-2"
               onClick={() => this.remove(index)}

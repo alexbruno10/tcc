@@ -17,8 +17,9 @@ const all = async () => {
 
 const get = async (id) => {
 
-  const client = await clientes.doc(id)
-  return client
+  return await clientes.doc(id).get()
+
+
 }
 
 const create = async (user) => {

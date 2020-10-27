@@ -28,7 +28,12 @@ export default class Listar extends Component {
 
   async all() {
     const orcamentos = await orcamentoService.all();
-    console.log(orcamentos);
+    this.setState({ list: orcamentos });
+  }
+
+  async remove(id) {
+    const orcamentos = await orcamentoService.remove(id);
+    this.all();
   }
 
   componentDidMount() {
@@ -37,25 +42,31 @@ export default class Listar extends Component {
 
   renderRows() {
     return this.state.list.map((orcamento) => {
+      const total = orcamento.itens.reduce((accumulator, currentValue) => {
+        return (
+          accumulator +
+          currentValue.alt * currentValue.larg * currentValue.valorUnit
+        );
+      }, 0);
+
       return (
         <tr key={orcamento.id}>
-          <td>{orcamento.id}</td>
-          <td>{orcamento.descricao}</td>
-          <td>{orcamento.unid}</td>
-          <td>{orcamento.alt}</td>
-          <td>{orcamento.larg}</td>
-          <td>{orcamento.valorUnit}</td>
-          <td>{orcamento.total}</td>
+          <td>{orcamento.cliente.name}</td>
+          <td>{orcamento.data}</td>
           <td>
-            <button
-              className="btn btn-warning"
-              onClick={() => this.load(orcamento)}
-            >
+            {total.toLocaleString("pt-br", {
+              style: "currency",
+              currency: "BRL",
+            })}
+          </td>
+          <td>
+            <Link to={"/orcamento/" + orcamento.id} className="btn btn-primary">
               <i className="fa fa-pencil"></i>
-            </button>
+            </Link>
+
             <button
               className="btn btn-danger ml-2"
-              onClick={() => this.remove(orcamento)}
+              onClick={() => this.remove(orcamento.id)}
             >
               <i className="fa fa-trash"></i>
             </button>
@@ -69,7 +80,6 @@ export default class Listar extends Component {
       <table className="table mt-4">
         <thead>
           <tr>
-            <th>ID</th>
             <th>Nome</th>
             <th>Data</th>
             <th>Valor Total</th>
