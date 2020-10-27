@@ -23,7 +23,11 @@ const logout = async () => {
 }
 
 const isLogged = async () => {
-    console.log(firebaseAuth.currentUser)
+    if (firebaseAuth.currentUser) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 export default { logar, isLogged }
