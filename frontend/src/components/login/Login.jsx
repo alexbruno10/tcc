@@ -1,9 +1,10 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import axios from "axios";
 import Main from "../template/Main";
 import loginService from "../../services/login";
 import "./login.css";
 import logo from "../../assets/imgs/logo.png";
+// import { useHistory } from "react-router-dom";
 
 const headerProps = {
   icon: "manutencao",
@@ -17,85 +18,76 @@ const initialState = {
   //definindo o estado inicial do formulario
 };
 
-export default class Login extends Component {
-  state = { ...initialState }; //chamando o estado inicial
+export default function Login({ history }) {
+  const [login, setLogin] = useState(initialState.login);
 
-  componentWillMount() {
-    //trazendo resposta do db, sobre quais usuarios estao cadastrados
-    loginService.isLogged();
-  }
-
-  async logar(e) {
+  const logar = async (e) => {
     e.preventDefault();
-    await loginService.logar(this.state.login);
-    this.props.history.push("/");
-  }
+    await loginService.logar(login);
+    history.push("/");
+    // window.location.href = "/";
+  };
 
-  updateField(event) {
+  function updateField(e) {
     //atualiza o nome com cliente
-    const login = { ...this.state.login };
-    login[event.target.name] = event.target.value;
-    this.setState({ login });
+    const login = { ...login };
+    login[e.target.name] = e.target.value;
+    setLogin({ login });
   }
 
-  render() {
-    return (
-      <Main {...headerProps}>
-        <div>
-          <div className="login-box">
-            <div className="login-logo">
-              <img src={logo} alt="Logo Sistema" />
-            </div>
-            <div className="login-box-body">
-              <form acceptCharset="utf-8" onSubmit={(e) => this.logar(e)}>
-                <div className="form-group has-feedback">
-                  <input
-                    type="text"
-                    name="usuario"
-                    defaultValue
-                    placeholder="Username"
-                    className="form-control"
-                    id="usuario"
-                    value={this.state.usuario}
-                    onChange={(e) => this.updateField(e)}
-                  />
-                  <span className="glyphicon glyphicon-user form-control-feedback" />
-                  <span>
-                    <font color="red" />
-                  </span>
-                </div>
-                <div className="form-group has-feedback">
-                  <input
-                    type="password"
-                    name="senha"
-                    defaultValue
-                    placeholder="senha"
-                    className="form-control"
-                    id="senha"
-                    onChange={(e) => this.updateField(e)}
-                  />
-                  <span className="glyphicon glyphicon-lock form-control-feedback" />
-                  <span>
-                    <font color="red" />
-                  </span>
-                </div>
-
-                <div className="col-xs-4">
-                  <button
-                    type="submit"
-                    name="submit"
-                    defaultValue="Logar"
-                    id="submit"
-                    className="btn btn-primary btn-block btn-flat"
-                  >
-                    Logar
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
+  return (
+    <div>
+      <div className="login-box">
+        <div className="login-logo">
+          <img src={logo} alt="Logo Sistema" />
         </div>
-      </Main>
-    );
-  }
+        <div className="login-box-body">
+          <form acceptCharset="utf-8" onSubmit={(e) => logar(e)}>
+            <div className="form-group has-feedback">
+              <input
+                type="text"
+                name="usuario"
+                placeholder="Username"
+                className="form-control"
+                id="usuario"
+                value={login.usuario}
+                onChange={(e) => updateField(e)}
+              />
+              <span className="glyphicon glyphicon-user form-control-feedback" />
+              <span>
+                <font color="red" />
+              </span>
+            </div>
+            <div className="form-group has-feedback">
+              <input
+                type="password"
+                name="senha"
+                value={login.senha}
+                placeholder="senha"
+                className="form-control"
+                id="senha"
+                onChange={(e) => updateField(e)}
+              />
+              <span className="glyphicon glyphicon-lock form-control-feedback" />
+              <span>
+                <font color="red" />
+              </span>
+            </div>
+
+            <div className="col-xs-4">
+              <button
+                type="submit"
+                name="submit"
+                defaultValue="Logar"
+                id="submit"
+                className="btn btn-primary btn-block btn-flat"
+              >
+                Logar
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
 }

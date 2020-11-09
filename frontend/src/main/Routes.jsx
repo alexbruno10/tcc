@@ -10,18 +10,38 @@ import Pedidos from "../components/pedidos/Pedidos";
 import Manutencao from "../components/manutencao/Manutencao";
 import Listar from "../components/orcamento/Listar";
 import Login from "../components/login/Login";
+import loginService from "../services/login";
+
+const PrivateRoute = ({ component: Component, ...rest }) => (
+  <Route
+    {...rest}
+    render={(props) =>
+      loginService.isLogged() === true ? (
+        <Component {...props} />
+      ) : (
+        <Redirect
+          to={{
+            pathname: "/login",
+            state: { from: props.location },
+          }}
+        />
+      )
+    }
+  />
+);
 
 export default (props) => (
   <Switch>
-    <Route exact path="/" component={Home} />
-    <Route path="/clientes" component={Clientes} />
-    <Route path="/orcamento" exact component={Listar} />
-    <Route path="/orcamento/novo" exact component={Orcamento} />
-    <Route path="/orcamento/:id" component={Orcamento} />
-    <Route path="/notas" component={Notas} />
-    <Route path="/estoque" component={Estoque} />
-    <Route path="/pedidos" component={Pedidos} />
-    <Route path="/manutencao" component={Manutencao} />
+    <PrivateRoute exact path="/" component={Home} />
+    <PrivateRoute path="/clientes" component={Clientes} />
+    <PrivateRoute path="/orcamento" exact component={Listar} />
+    <PrivateRoute path="/orcamento/novo" exact component={Orcamento} />
+    <PrivateRoute path="/orcamento/:id" component={Orcamento} />
+    <PrivateRoute path="/notas" component={Notas} />
+    <PrivateRoute path="/estoque" component={Estoque} />
+    <PrivateRoute path="/pedidos" component={Pedidos} />
+    <PrivateRoute path="/manutencao" component={Manutencao} />
+    <Route path="/login" component={Login} />
     <Redirect from="*" to="/" />
   </Switch>
 );
